@@ -1,0 +1,57 @@
+services:
+  db:
+    container_name: wissquiz_db
+    build:
+      context: ./backend/src/main/resources/Database
+    environment:
+      MYSQL_ROOT_PASSWORD: schnappie
+    volumes:
+      - wissquiz_db_data:/var/lib/mysql
+    networks:
+      - mynet123
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -pschnappie --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 40
+      start_period: 30s
+
+  api:
+    container_name: wissquiz_api
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: db
+      ENV_VAR: OK
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - mynet123
+
+  frontend:
+    container_name: wissquiz_frontend
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: http://localhost:8080
+    ports:
+      - "80:80"
+    depends_on:
+      api:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - mynet123
+
+networks:
+  mynet123:
+    name: mynet123
+    driver: bridge
+
+volumes:
+  wissquiz_db_data:
+    name: wissquiz_db_data
