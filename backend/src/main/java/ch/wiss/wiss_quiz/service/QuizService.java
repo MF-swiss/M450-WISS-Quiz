@@ -16,6 +16,9 @@ import ch.wiss.wiss_quiz.model.Answer;
 @Service
 public class QuizService {
 
+    private static final int PASS_THRESHOLD = 60;
+    private static final int QUIZ_FOO_COUNT = 3;
+
     private final FooRepository FooRepository;
     private final CategoryRepository categoryRepository;
 
@@ -33,16 +36,16 @@ public class QuizService {
         List<Foo> copy = new ArrayList<>(Foos);
 
         if (copy.size() > maxFoos) {
-        	//Random random = new Random();
-        	Random random = new Random(42); // set random seed for predictable results for Selenium-tests
-        	Collections.shuffle(copy, random);            
+            Random random = new Random(42); // predictable for tests
+            Collections.shuffle(copy, random);
         }
+
         int limit = Math.min(copy.size(), maxFoos);
         return copy.subList(0, limit);
     }
 
     public boolean hasEnoughFoos(List<Foo> Foos) {
-        return Foos != null && Foos.size() >= 3;
+        return Foos != null && Foos.size() >= QUIZ_FOO_COUNT;
     }
 
     public double calculateScorePercent(int correct, int total) {
@@ -53,7 +56,7 @@ public class QuizService {
     }
 
     public boolean isQuizPassed(double percent) {
-        return percent >= 60;
+        return percent >= PASS_THRESHOLD;
     }
 
     public List<Foo> getQuizFoosByCategoryId(Integer catId) {
@@ -65,13 +68,13 @@ public class QuizService {
                 .filter(this::validateFooForQuiz)
                 .toList();
 
-        if (validFoos.size() < 3) {
+        if (validFoos.size() < QUIZ_FOO_COUNT) {
             throw new IllegalStateException("Not enough valid Foos for quiz");
         }
 
-        return pickQuizFoos(validFoos, 3);
+        return pickQuizFoos(validFoos, QUIZ_FOO_COUNT);
     }
-    
+
     public boolean validateFooForQuiz(Foo Foo) {
 
         if (Foo == null) {
@@ -108,8 +111,8 @@ public class QuizService {
         }
 
         return correctAnswers == 1;
-    }    
-    
+    }
+
     public boolean categoryHasEnoughValidFoos(Integer categoryId, int requiredCount) {
 
         if (categoryId == null || requiredCount <= 0) {
@@ -126,7 +129,7 @@ public class QuizService {
 
         return validCount >= requiredCount;
     }
-    
+
     public int countValidFoos(List<Foo> Foos) {
 
         if (Foos == null || Foos.isEmpty()) {

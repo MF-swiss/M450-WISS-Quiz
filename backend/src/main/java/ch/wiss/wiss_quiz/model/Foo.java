@@ -18,58 +18,51 @@ import javax.persistence.Table;
 @Table(name = "foo")
 public class Foo {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	public class Foo {
+    // Fragetext
+    private String foo;
 
-  		private static Foo foo;
-  		public Foo getInstance() {
-    		if(foo==null) {
-      			foo = new Foo();
-    	}
-    	return foo;
-  	}
-}
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "category_id", nullable = false)
-	private Category category;
+    @OneToMany(mappedBy = "foo", cascade = CascadeType.ALL)
+    private List<Answer> answers = new ArrayList<>();
 
-	public Integer getId() {
-		return id;
-	}
+    // --- Getter / Setter ---
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public String getFoo() {
-		return Foo;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setFoo(String foo) {
-		this.Foo = foo;
-	}
+    public String getFoo() {
+        return foo;
+    }
 
-	public void setCategory(Category cat) {
-		this.category = cat;
-	}
+    public void setFoo(String foo) {
+        this.foo = foo;
+    }
 
-	public Category getCategory() {
-		return category;
-	}
+    public Category getCategory() {
+        return category;
+    }
 
-	@OneToMany(mappedBy = "foo", cascade = CascadeType.ALL)
-	private List<Answer> answers = new ArrayList<>();
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
-	public List<Answer> getAnswers() {
-		return answers;
-	}
+    public List<Answer> getAnswers() {
+        return answers;
+    }
 
-	public void setAnswers(List<Answer> foo) {
-		this.answers = foo;
-	}
-
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
 }

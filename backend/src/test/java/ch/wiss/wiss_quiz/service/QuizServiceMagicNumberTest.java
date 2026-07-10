@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class QuizServiceMagicNumberTest {
+import ch.wiss.wiss_quiz.model.Foo;
+
+class QuizServiceMagicNumberTest {
 
     @Test
     @DisplayName("Quiz ist bestanden bei genau 60 Prozent")
