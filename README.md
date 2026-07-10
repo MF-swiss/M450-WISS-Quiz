@@ -5,3 +5,7 @@ Dieses Repository enthält ein REACT-basiertes Webinterface (*frontend*) für ei
 ![](img/2023-02-09-08-37-04.png)
 
 Die Teilkomponenten und allfällige Docker-Deployments sind in den Unterordnern bzw. im Code erläutert.
+
+
+Pull von
+git@github.com:CCB67/M450-Apptesting-CodeQuiz.git
