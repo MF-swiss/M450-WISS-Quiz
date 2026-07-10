@@ -21,16 +21,16 @@ INSERT INTO `category` VALUES
 (4,'Applikationen testen'),
 (5,'Skriptsprache Bash');
 
-CREATE TABLE `question` (
+CREATE TABLE `Foo` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `question` varchar(255) DEFAULT NULL,
+  `Foo` varchar(255) DEFAULT NULL,
   `category_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK7jaqbm9p4prg7n91dd1uabrvj` (`category_id`),
   CONSTRAINT `FK7jaqbm9p4prg7n91dd1uabrvj` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `question` VALUES
+INSERT INTO `Foo` VALUES
 (1,'Welcher SQL-Befehl dient zum Abfragen von Daten?',1),
 (2,'Welcher SQL-Befehl fügt neue Datensätze ein?',1),
 (3,'Welcher SQL-Befehl erstellt eine neue Tabelle?',1),
@@ -90,10 +90,10 @@ CREATE TABLE `answer` (
   `id` int NOT NULL AUTO_INCREMENT,
   `answer` varchar(255) DEFAULT NULL,
   `correct` TINYINT(1) NOT NULL,
-  `question_id` int DEFAULT NULL,
+  `Foo_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK8frr4bcabmmeyyu60qt7iiblo` (`question_id`),
-  CONSTRAINT `FK8frr4bcabmmeyyu60qt7iiblo` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`)
+  KEY `FK8frr4bcabmmeyyu60qt7iiblo` (`Foo_id`),
+  CONSTRAINT `FK8frr4bcabmmeyyu60qt7iiblo` FOREIGN KEY (`Foo_id`) REFERENCES `Foo` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `answer` VALUES

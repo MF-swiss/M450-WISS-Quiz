@@ -17,14 +17,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ch.wiss.wiss_quiz.model.Answer;
 import ch.wiss.wiss_quiz.model.Category;
 import ch.wiss.wiss_quiz.model.CategoryRepository;
-import ch.wiss.wiss_quiz.model.Question;
-import ch.wiss.wiss_quiz.model.QuestionRepository;
+import ch.wiss.wiss_quiz.model.Foo;
+import ch.wiss.wiss_quiz.model.FooRepository;
 
 @ExtendWith(MockitoExtension.class)
 class QuizServiceMockitoTest {
 
     @Mock
-    private QuestionRepository questionRepository;
+    private FooRepository FooRepository;
 
     @Mock
     private CategoryRepository categoryRepository;
@@ -34,164 +34,164 @@ class QuizServiceMockitoTest {
 
     // Station 4 – Service und Datenbank (Mockito), Fehlerfall
     @Test
-    void getQuizQuestionsByCategoryId_throwsException_whenNotEnoughQuestionsExist() {
+    void getQuizFoosByCategoryId_throwsException_whenNotEnoughFoosExist() {
         Category category = new Category();
-        List<Question> questions = List.of(
-                new Question(),
-                new Question()
+        List<Foo> Foos = List.of(
+                new Foo(),
+                new Foo()
         );
 
         when(categoryRepository.findById(1)).thenReturn(Optional.of(category));
-        when(questionRepository.findByCategory(category)).thenReturn(questions);
+        when(FooRepository.findByCategory(category)).thenReturn(Foos);
 
-        assertThrows(IllegalStateException.class, () -> service.getQuizQuestionsByCategoryId(1));
+        assertThrows(IllegalStateException.class, () -> service.getQuizFoosByCategoryId(1));
     }
 
     // Station 4 – Service und Datenbank (Mockito)
     @Test
-    void getQuizQuestionsByCategoryId_throwsException_whenCategoryDoesNotExist() {
+    void getQuizFoosByCategoryId_throwsException_whenCategoryDoesNotExist() {
         when(categoryRepository.findById(99)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> service.getQuizQuestionsByCategoryId(99));
+        assertThrows(RuntimeException.class, () -> service.getQuizFoosByCategoryId(99));
     }
 
     // Station 4 – Service und Datenbank (Mockito)
     @Test
-    void getQuizQuestionsByCategoryId_returnsThreeQuestions_whenEnoughValidQuestionsExist() {
+    void getQuizFoosByCategoryId_returnsThreeFoos_whenEnoughValidFoosExist() {
         Category category = new Category();
-        List<Question> questions = List.of(
-                createValidQuestion("Q1"),
-                createValidQuestion("Q2"),
-                createValidQuestion("Q3"),
-                createValidQuestion("Q4")
+        List<Foo> Foos = List.of(
+                createValidFoo("Q1"),
+                createValidFoo("Q2"),
+                createValidFoo("Q3"),
+                createValidFoo("Q4")
         );
 
         when(categoryRepository.findById(1)).thenReturn(Optional.of(category));
-        when(questionRepository.findByCategory(category)).thenReturn(questions);
+        when(FooRepository.findByCategory(category)).thenReturn(Foos);
 
-        List<Question> result = service.getQuizQuestionsByCategoryId(1);
+        List<Foo> result = service.getQuizFoosByCategoryId(1);
 
         assertEquals(3, result.size());
     }
 
     // Station 4 – Service und Datenbank (Mockito)
     @Test
-    void getQuizQuestionsByCategoryId_throwsException_whenNotEnoughValidQuestionsExist() {
+    void getQuizFoosByCategoryId_throwsException_whenNotEnoughValidFoosExist() {
         Category category = new Category();
-        List<Question> questions = List.of(
-                createValidQuestion("Q1"),
-                createValidQuestion("Q2"),
-                createInvalidQuestion()
+        List<Foo> Foos = List.of(
+                createValidFoo("Q1"),
+                createValidFoo("Q2"),
+                createInvalidFoo()
         );
 
         when(categoryRepository.findById(1)).thenReturn(Optional.of(category));
-        when(questionRepository.findByCategory(category)).thenReturn(questions);
+        when(FooRepository.findByCategory(category)).thenReturn(Foos);
 
-        assertThrows(IllegalStateException.class, () -> service.getQuizQuestionsByCategoryId(1));
+        assertThrows(IllegalStateException.class, () -> service.getQuizFoosByCategoryId(1));
     }
 
     // Station 4 – Service und Datenbank (Mockito)
     @Test
-    void categoryHasEnoughValidQuestions_returnsTrue_whenEnoughValidQuestionsExist() {
+    void categoryHasEnoughValidFoos_returnsTrue_whenEnoughValidFoosExist() {
         Category category = new Category();
-        List<Question> questions = List.of(
-                createValidQuestion("Q1"),
-                createValidQuestion("Q2"),
-                createValidQuestion("Q3"),
-                createInvalidQuestion()
+        List<Foo> Foos = List.of(
+                createValidFoo("Q1"),
+                createValidFoo("Q2"),
+                createValidFoo("Q3"),
+                createInvalidFoo()
         );
 
         when(categoryRepository.findById(1)).thenReturn(Optional.of(category));
-        when(questionRepository.findByCategory(category)).thenReturn(questions);
+        when(FooRepository.findByCategory(category)).thenReturn(Foos);
 
-        boolean result = service.categoryHasEnoughValidQuestions(1, 3);
+        boolean result = service.categoryHasEnoughValidFoos(1, 3);
 
         assertTrue(result);
     }
 
     // Station 4 – Service und Datenbank (Mockito)
     @Test
-    void categoryHasEnoughValidQuestions_returnsFalse_whenNotEnoughValidQuestionsExist() {
+    void categoryHasEnoughValidFoos_returnsFalse_whenNotEnoughValidFoosExist() {
         Category category = new Category();
-        List<Question> questions = List.of(
-                createValidQuestion("Q1"),
-                createInvalidQuestion(),
-                createInvalidQuestion()
+        List<Foo> Foos = List.of(
+                createValidFoo("Q1"),
+                createInvalidFoo(),
+                createInvalidFoo()
         );
 
         when(categoryRepository.findById(1)).thenReturn(Optional.of(category));
-        when(questionRepository.findByCategory(category)).thenReturn(questions);
+        when(FooRepository.findByCategory(category)).thenReturn(Foos);
 
-        boolean result = service.categoryHasEnoughValidQuestions(1, 2);
+        boolean result = service.categoryHasEnoughValidFoos(1, 2);
 
         assertFalse(result);
     }
 
     // Station 4 – Service und Datenbank (Mockito)
     @Test
-    void categoryHasEnoughValidQuestions_returnsFalse_whenCategoryDoesNotExist() {
+    void categoryHasEnoughValidFoos_returnsFalse_whenCategoryDoesNotExist() {
         when(categoryRepository.findById(99)).thenReturn(Optional.empty());
 
-        boolean result = service.categoryHasEnoughValidQuestions(99, 3);
+        boolean result = service.categoryHasEnoughValidFoos(99, 3);
 
         assertFalse(result);
     }
 
     // Station 4 – Service und Datenbank (Mockito)
     @Test
-    void categoryHasEnoughValidQuestions_returnsFalse_whenCategoryIdIsNull() {
-        boolean result = service.categoryHasEnoughValidQuestions(null, 3);
+    void categoryHasEnoughValidFoos_returnsFalse_whenCategoryIdIsNull() {
+        boolean result = service.categoryHasEnoughValidFoos(null, 3);
 
         assertFalse(result);
-        verifyNoInteractions(categoryRepository, questionRepository);
+        verifyNoInteractions(categoryRepository, FooRepository);
     }
 
     // Station 4 – Service und Datenbank (Mockito)
     @Test
-    void categoryHasEnoughValidQuestions_returnsFalse_whenRequiredCountIsZero() {
-        boolean result = service.categoryHasEnoughValidQuestions(1, 0);
+    void categoryHasEnoughValidFoos_returnsFalse_whenRequiredCountIsZero() {
+        boolean result = service.categoryHasEnoughValidFoos(1, 0);
 
         assertFalse(result);
-        verifyNoInteractions(categoryRepository, questionRepository);
+        verifyNoInteractions(categoryRepository, FooRepository);
     }
 
     // Station 4 – Service und Datenbank (Mockito)
     @Test
-    void getQuizQuestionsByCategoryId_callsRepositories() {
+    void getQuizFoosByCategoryId_callsRepositories() {
         Category category = new Category();
-        List<Question> questions = List.of(
-                createValidQuestion("Q1"),
-                createValidQuestion("Q2"),
-                createValidQuestion("Q3")
+        List<Foo> Foos = List.of(
+                createValidFoo("Q1"),
+                createValidFoo("Q2"),
+                createValidFoo("Q3")
         );
 
         when(categoryRepository.findById(1)).thenReturn(Optional.of(category));
-        when(questionRepository.findByCategory(category)).thenReturn(questions);
+        when(FooRepository.findByCategory(category)).thenReturn(Foos);
 
-        service.getQuizQuestionsByCategoryId(1);
+        service.getQuizFoosByCategoryId(1);
 
         verify(categoryRepository).findById(1);
-        verify(questionRepository).findByCategory(category);
+        verify(FooRepository).findByCategory(category);
     }
 
-    private Question createValidQuestion(String text) {
-        Question question = new Question();
-        question.setQuestion(text);
-        question.setAnswers(List.of(
+    private Foo createValidFoo(String text) {
+        Foo Foo = new Foo();
+        Foo.setFoo(text);
+        Foo.setAnswers(List.of(
                 createAnswer("A", true),
                 createAnswer("B", false)
         ));
-        return question;
+        return Foo;
     }
 
-    private Question createInvalidQuestion() {
-        Question question = new Question();
-        question.setQuestion("Invalid");
-        question.setAnswers(List.of(
+    private Foo createInvalidFoo() {
+        Foo Foo = new Foo();
+        Foo.setFoo("Invalid");
+        Foo.setAnswers(List.of(
                 createAnswer("A", true),
                 createAnswer("B", true)
         ));
-        return question;
+        return Foo;
     }
 
     private Answer createAnswer(String text, boolean correct) {

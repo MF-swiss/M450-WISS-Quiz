@@ -16,14 +16,14 @@ import ch.wiss.wiss_quiz.model.Answer;
 import ch.wiss.wiss_quiz.model.AnswerRepository;
 import ch.wiss.wiss_quiz.model.Category;
 import ch.wiss.wiss_quiz.model.CategoryRepository;
-import ch.wiss.wiss_quiz.model.Question;
-import ch.wiss.wiss_quiz.model.QuestionRepository;
+import ch.wiss.wiss_quiz.model.Foo;
+import ch.wiss.wiss_quiz.model.FooRepository;
 
 @Controller // This means that this class is a Controller
-@RequestMapping(path="/question") // This means URL's start with /question (after Application path)
-public class QuestionController {
+@RequestMapping(path="/Foo") // This means URL's start with /Foo (after Application path)
+public class FooController {
   @Autowired
-  private QuestionRepository questionRepository;
+  private FooRepository FooRepository;
   @Autowired
   private CategoryRepository categoryRepository;
   @Autowired
@@ -31,19 +31,19 @@ public class QuestionController {
   
   //@CrossOrigin(origins = "http://localhost:3000")
   @PostMapping(path="/{cat_id}") // Map ONLY POST Requests
-  public @ResponseBody String addNewQuestion(@PathVariable(value="cat_id") Integer catId, @RequestBody Question question) {
+  public @ResponseBody String addNewFoo(@PathVariable(value="cat_id") Integer catId, @RequestBody Foo Foo) {
       
 	Optional<Category> cat = categoryRepository.findById(catId);
-	question.setCategory(cat.get());
+	Foo.setCategory(cat.get());
 	// we need to store nested Answer-Objects seperately
-	List<Answer> answers = List.copyOf(question.getAnswers());
+	List<Answer> answers = List.copyOf(Foo.getAnswers());
 	
-	question.setAnswers(null);
-	questionRepository.save(question);
+	Foo.setAnswers(null);
+	FooRepository.save(Foo);
 	
 	// we need to store nested Answer-Objects seperately
 	answers.forEach(a -> {
-		a.setQuestion(question);
+		a.setFoo(Foo);
 		answerRepository.save(a);
 	});
 	
@@ -52,8 +52,8 @@ public class QuestionController {
   
   //@CrossOrigin(origins = "http://localhost:3000")
   @GetMapping(path="")
-  public @ResponseBody Iterable<Question> getAllQuestions() {    
-    return questionRepository.findAll();
+  public @ResponseBody Iterable<Foo> getAllFoos() {    
+    return FooRepository.findAll();
   } 
     
 }

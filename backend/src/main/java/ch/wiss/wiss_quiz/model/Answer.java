@@ -23,9 +23,9 @@ public class Answer {
 	private boolean correct;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "question_id", nullable = false)
+	@JoinColumn(name = "foo_id", nullable = false)
 	@JsonBackReference
-	private Question question;
+	private Foo foo;
 	
 	public Integer getId() {
 		return id;
@@ -51,12 +51,12 @@ public class Answer {
 		this.correct = correct;
 	}
 
-	public Question getQuestion() {
-		return question;
+	public Foo getFoo() {
+		return foo;
 	}
 
-	public void setQuestion(Question question) {
-		this.question = question;
+	public void setFoo(Foo foo) {
+		this.foo = foo;
 	}	
 	
 }

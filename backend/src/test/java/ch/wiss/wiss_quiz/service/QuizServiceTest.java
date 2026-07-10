@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ch.wiss.wiss_quiz.model.Answer;
-import ch.wiss.wiss_quiz.model.Question;
+import ch.wiss.wiss_quiz.model.Foo;
 
 class QuizServiceTest {
 
@@ -23,9 +23,9 @@ class QuizServiceTest {
     // Station 1 – Standardfälle (Happy Path)
     @Test
     void returnsAllIfLessOrEqualMax() {
-        List<Question> input = List.of(new Question(), new Question());
+        List<Foo> input = List.of(new Foo(), new Foo());
 
-        List<Question> result = service.pickQuizQuestions(input, 3);
+        List<Foo> result = service.pickQuizFoos(input, 3);
 
         assertEquals(2, result.size());
     }
@@ -33,11 +33,11 @@ class QuizServiceTest {
     // Station 1 – Standardfälle (Happy Path)
     @Test
     void limitsToMaxIfMoreThanMax() {
-        List<Question> input = List.of(
-                new Question(), new Question(), new Question(), new Question(), new Question()
+        List<Foo> input = List.of(
+                new Foo(), new Foo(), new Foo(), new Foo(), new Foo()
         );
 
-        List<Question> result = service.pickQuizQuestions(input, 3);
+        List<Foo> result = service.pickQuizFoos(input, 3);
 
         assertEquals(3, result.size());
     }
@@ -45,11 +45,11 @@ class QuizServiceTest {
     // Station 1 – Standardfälle (Happy Path)
     @Test
     void doesNotModifyOriginalList() {
-        List<Question> input = new ArrayList<>(List.of(
-                new Question(), new Question(), new Question(), new Question()
+        List<Foo> input = new ArrayList<>(List.of(
+                new Foo(), new Foo(), new Foo(), new Foo()
         ));
 
-        service.pickQuizQuestions(input, 3);
+        service.pickQuizFoos(input, 3);
 
         assertEquals(4, input.size());
     }
@@ -81,17 +81,17 @@ class QuizServiceTest {
     // Station 2 – Randfälle (Edge Cases)
     @Test
     void handlesBadInputs() {
-        assertTrue(service.pickQuizQuestions(null, 3).isEmpty());
-        assertTrue(service.pickQuizQuestions(List.of(), 3).isEmpty());
-        assertTrue(service.pickQuizQuestions(List.of(new Question()), 0).isEmpty());
+        assertTrue(service.pickQuizFoos(null, 3).isEmpty());
+        assertTrue(service.pickQuizFoos(List.of(), 3).isEmpty());
+        assertTrue(service.pickQuizFoos(List.of(new Foo()), 0).isEmpty());
     }
 
     // Station 2 – Randfälle (Edge Cases)
     @Test
-    void pickQuizQuestions_returnsEmptyList_whenMaxQuestionsIsNegative() {
-        List<Question> input = List.of(new Question(), new Question());
+    void pickQuizFoos_returnsEmptyList_whenMaxFoosIsNegative() {
+        List<Foo> input = List.of(new Foo(), new Foo());
 
-        List<Question> result = service.pickQuizQuestions(input, -1);
+        List<Foo> result = service.pickQuizFoos(input, -1);
 
         assertTrue(result.isEmpty());
     }
@@ -114,175 +114,175 @@ class QuizServiceTest {
 
     // Station 2 – Randfälle (Edge Cases)
     @Test
-    void hasEnoughQuestions_returnsTrue_whenListHasAtLeastThreeQuestions() {
-        List<Question> input = List.of(new Question(), new Question(), new Question());
+    void hasEnoughFoos_returnsTrue_whenListHasAtLeastThreeFoos() {
+        List<Foo> input = List.of(new Foo(), new Foo(), new Foo());
 
-        boolean result = service.hasEnoughQuestions(input);
+        boolean result = service.hasEnoughFoos(input);
 
         assertTrue(result);
     }
 
     // Station 2 – Randfälle (Edge Cases)
     @Test
-    void hasEnoughQuestions_returnsFalse_whenListHasLessThanThreeQuestions() {
-        List<Question> input = List.of(new Question(), new Question());
+    void hasEnoughFoos_returnsFalse_whenListHasLessThanThreeFoos() {
+        List<Foo> input = List.of(new Foo(), new Foo());
 
-        boolean result = service.hasEnoughQuestions(input);
-
-        assertFalse(result);
-    }
-
-    // Station 3 – Validierung von Quizfragen
-    @Test
-    void validateQuestionForQuiz_returnsFalse_whenQuestionIsNull() {
-        boolean result = service.validateQuestionForQuiz(null);
+        boolean result = service.hasEnoughFoos(input);
 
         assertFalse(result);
     }
 
     // Station 3 – Validierung von Quizfragen
     @Test
-    void validateQuestionForQuiz_returnsFalse_whenQuestionTextIsNull() {
-        Question question = new Question();
-        question.setQuestion(null);
-        question.setAnswers(createValidAnswers());
-
-        boolean result = service.validateQuestionForQuiz(question);
+    void validateFooForQuiz_returnsFalse_whenFooIsNull() {
+        boolean result = service.validateFooForQuiz(null);
 
         assertFalse(result);
     }
 
     // Station 3 – Validierung von Quizfragen
     @Test
-    void validateQuestionForQuiz_returnsFalse_whenQuestionTextIsBlank() {
-        Question question = new Question();
-        question.setQuestion("   ");
-        question.setAnswers(createValidAnswers());
+    void validateFooForQuiz_returnsFalse_whenFooTextIsNull() {
+        Foo Foo = new Foo();
+        Foo.setFoo(null);
+        Foo.setAnswers(createValidAnswers());
 
-        boolean result = service.validateQuestionForQuiz(question);
-
-        assertFalse(result);
-    }
-
-    // Station 3 – Validierung von Quizfragen
-    @Test
-    void validateQuestionForQuiz_returnsFalse_whenAnswersAreNull() {
-        Question question = new Question();
-        question.setQuestion("Frage?");
-
-        boolean result = service.validateQuestionForQuiz(question);
+        boolean result = service.validateFooForQuiz(Foo);
 
         assertFalse(result);
     }
 
     // Station 3 – Validierung von Quizfragen
     @Test
-    void validateQuestionForQuiz_returnsFalse_whenLessThanTwoAnswersExist() {
-        Question question = new Question();
-        question.setQuestion("Frage?");
-        question.setAnswers(List.of(createAnswer("Nur eine", true)));
+    void validateFooForQuiz_returnsFalse_whenFooTextIsBlank() {
+        Foo Foo = new Foo();
+        Foo.setFoo("   ");
+        Foo.setAnswers(createValidAnswers());
 
-        boolean result = service.validateQuestionForQuiz(question);
+        boolean result = service.validateFooForQuiz(Foo);
 
         assertFalse(result);
     }
 
     // Station 3 – Validierung von Quizfragen
     @Test
-    void validateQuestionForQuiz_returnsFalse_whenAnswerIsNull() {
-        Question question = new Question();
-        question.setQuestion("Frage?");
+    void validateFooForQuiz_returnsFalse_whenAnswersAreNull() {
+        Foo Foo = new Foo();
+        Foo.setFoo("Frage?");
+
+        boolean result = service.validateFooForQuiz(Foo);
+
+        assertFalse(result);
+    }
+
+    // Station 3 – Validierung von Quizfragen
+    @Test
+    void validateFooForQuiz_returnsFalse_whenLessThanTwoAnswersExist() {
+        Foo Foo = new Foo();
+        Foo.setFoo("Frage?");
+        Foo.setAnswers(List.of(createAnswer("Nur eine", true)));
+
+        boolean result = service.validateFooForQuiz(Foo);
+
+        assertFalse(result);
+    }
+
+    // Station 3 – Validierung von Quizfragen
+    @Test
+    void validateFooForQuiz_returnsFalse_whenAnswerIsNull() {
+        Foo Foo = new Foo();
+        Foo.setFoo("Frage?");
 
         List<Answer> answers = new ArrayList<>();
         answers.add(createAnswer("A", true));
         answers.add(null);
 
-        question.setAnswers(answers);
+        Foo.setAnswers(answers);
 
-        boolean result = service.validateQuestionForQuiz(question);
+        boolean result = service.validateFooForQuiz(Foo);
 
         assertFalse(result);
     }
     // Station 3 – Validierung von Quizfragen
     @Test
-    void validateQuestionForQuiz_returnsFalse_whenAnswerTextIsBlank() {
-        Question question = new Question();
-        question.setQuestion("Frage?");
-        question.setAnswers(List.of(createAnswer(" ", true), createAnswer("B", false)));
+    void validateFooForQuiz_returnsFalse_whenAnswerTextIsBlank() {
+        Foo Foo = new Foo();
+        Foo.setFoo("Frage?");
+        Foo.setAnswers(List.of(createAnswer(" ", true), createAnswer("B", false)));
 
-        boolean result = service.validateQuestionForQuiz(question);
-
-        assertFalse(result);
-    }
-
-    // Station 3 – Validierung von Quizfragen
-    @Test
-    void validateQuestionForQuiz_returnsFalse_whenNoCorrectAnswerExists() {
-        Question question = new Question();
-        question.setQuestion("Frage?");
-        question.setAnswers(List.of(createAnswer("A", false), createAnswer("B", false)));
-
-        boolean result = service.validateQuestionForQuiz(question);
+        boolean result = service.validateFooForQuiz(Foo);
 
         assertFalse(result);
     }
 
     // Station 3 – Validierung von Quizfragen
     @Test
-    void validateQuestionForQuiz_returnsFalse_whenMultipleCorrectAnswersExist() {
-        Question question = new Question();
-        question.setQuestion("Frage?");
-        question.setAnswers(List.of(createAnswer("A", true), createAnswer("B", true)));
+    void validateFooForQuiz_returnsFalse_whenNoCorrectAnswerExists() {
+        Foo Foo = new Foo();
+        Foo.setFoo("Frage?");
+        Foo.setAnswers(List.of(createAnswer("A", false), createAnswer("B", false)));
 
-        boolean result = service.validateQuestionForQuiz(question);
+        boolean result = service.validateFooForQuiz(Foo);
 
         assertFalse(result);
     }
 
     // Station 3 – Validierung von Quizfragen
     @Test
-    void validateQuestionForQuiz_returnsTrue_whenExactlyOneCorrectAnswerExists() {
-        Question question = new Question();
-        question.setQuestion("Frage?");
-        question.setAnswers(createValidAnswers());
+    void validateFooForQuiz_returnsFalse_whenMultipleCorrectAnswersExist() {
+        Foo Foo = new Foo();
+        Foo.setFoo("Frage?");
+        Foo.setAnswers(List.of(createAnswer("A", true), createAnswer("B", true)));
 
-        boolean result = service.validateQuestionForQuiz(question);
+        boolean result = service.validateFooForQuiz(Foo);
+
+        assertFalse(result);
+    }
+
+    // Station 3 – Validierung von Quizfragen
+    @Test
+    void validateFooForQuiz_returnsTrue_whenExactlyOneCorrectAnswerExists() {
+        Foo Foo = new Foo();
+        Foo.setFoo("Frage?");
+        Foo.setAnswers(createValidAnswers());
+
+        boolean result = service.validateFooForQuiz(Foo);
 
         assertTrue(result);
     }
 
     // Station 3 – Validierung von Quizfragen
     @Test
-    void countValidQuestions_returnsZero_whenQuestionsIsNull() {
-        int result = service.countValidQuestions(null);
+    void countValidFoos_returnsZero_whenFoosIsNull() {
+        int result = service.countValidFoos(null);
 
         assertEquals(0, result);
     }
 
     // Station 3 – Validierung von Quizfragen
     @Test
-    void countValidQuestions_returnsZero_whenQuestionsIsEmpty() {
-        int result = service.countValidQuestions(List.of());
+    void countValidFoos_returnsZero_whenFoosIsEmpty() {
+        int result = service.countValidFoos(List.of());
 
         assertEquals(0, result);
     }
 
     // Station 3 – Validierung von Quizfragen
     @Test
-    void countValidQuestions_countsOnlyValidQuestions() {
-        Question valid1 = new Question();
-        valid1.setQuestion("Q1");
+    void countValidFoos_countsOnlyValidFoos() {
+        Foo valid1 = new Foo();
+        valid1.setFoo("Q1");
         valid1.setAnswers(createValidAnswers());
 
-        Question valid2 = new Question();
-        valid2.setQuestion("Q2");
+        Foo valid2 = new Foo();
+        valid2.setFoo("Q2");
         valid2.setAnswers(createValidAnswers());
 
-        Question invalid = new Question();
-        invalid.setQuestion("Q3");
+        Foo invalid = new Foo();
+        invalid.setFoo("Q3");
         invalid.setAnswers(List.of(createAnswer("Only one", true)));
 
-        int result = service.countValidQuestions(List.of(valid1, invalid, valid2));
+        int result = service.countValidFoos(List.of(valid1, invalid, valid2));
 
         assertEquals(2, result);
     }

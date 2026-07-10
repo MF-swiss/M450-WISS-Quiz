@@ -9,40 +9,40 @@ import org.springframework.stereotype.Service;
 
 import ch.wiss.wiss_quiz.model.Category;
 import ch.wiss.wiss_quiz.model.CategoryRepository;
-import ch.wiss.wiss_quiz.model.Question;
-import ch.wiss.wiss_quiz.model.QuestionRepository;
+import ch.wiss.wiss_quiz.model.Foo;
+import ch.wiss.wiss_quiz.model.FooRepository;
 import ch.wiss.wiss_quiz.model.Answer;
 
 @Service
 public class QuizService {
 
-    private final QuestionRepository questionRepository;
+    private final FooRepository FooRepository;
     private final CategoryRepository categoryRepository;
 
-    public QuizService(QuestionRepository questionRepository,
+    public QuizService(FooRepository FooRepository,
                        CategoryRepository categoryRepository) {
-        this.questionRepository = questionRepository;
+        this.FooRepository = FooRepository;
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Question> pickQuizQuestions(List<Question> questions, int maxQuestions) {
-        if (questions == null || questions.isEmpty() || maxQuestions <= 0) {
+    public List<Foo> pickQuizFoos(List<Foo> Foos, int maxFoos) {
+        if (Foos == null || Foos.isEmpty() || maxFoos <= 0) {
             return List.of();
         }
 
-        List<Question> copy = new ArrayList<>(questions);
+        List<Foo> copy = new ArrayList<>(Foos);
 
-        if (copy.size() > maxQuestions) {
+        if (copy.size() > maxFoos) {
         	//Random random = new Random();
         	Random random = new Random(42); // set random seed for predictable results for Selenium-tests
         	Collections.shuffle(copy, random);            
         }
-        int limit = Math.min(copy.size(), maxQuestions);
+        int limit = Math.min(copy.size(), maxFoos);
         return copy.subList(0, limit);
     }
 
-    public boolean hasEnoughQuestions(List<Question> questions) {
-        return questions != null && questions.size() >= 3;
+    public boolean hasEnoughFoos(List<Foo> Foos) {
+        return Foos != null && Foos.size() >= 3;
     }
 
     public double calculateScorePercent(int correct, int total) {
@@ -56,34 +56,34 @@ public class QuizService {
         return percent >= 60;
     }
 
-    public List<Question> getQuizQuestionsByCategoryId(Integer catId) {
+    public List<Foo> getQuizFoosByCategoryId(Integer catId) {
         Category cat = categoryRepository.findById(catId).orElseThrow();
 
-        List<Question> questions = questionRepository.findByCategory(cat);
+        List<Foo> Foos = FooRepository.findByCategory(cat);
 
-        List<Question> validQuestions = questions.stream()
-                .filter(this::validateQuestionForQuiz)
+        List<Foo> validFoos = Foos.stream()
+                .filter(this::validateFooForQuiz)
                 .toList();
 
-        if (validQuestions.size() < 3) {
-            throw new IllegalStateException("Not enough valid questions for quiz");
+        if (validFoos.size() < 3) {
+            throw new IllegalStateException("Not enough valid Foos for quiz");
         }
 
-        return pickQuizQuestions(validQuestions, 3);
+        return pickQuizFoos(validFoos, 3);
     }
     
-    public boolean validateQuestionForQuiz(Question question) {
+    public boolean validateFooForQuiz(Foo Foo) {
 
-        if (question == null) {
+        if (Foo == null) {
             return false;
         }
 
-        String questionText = question.getQuestion();
-        if (questionText == null || questionText.trim().isEmpty()) {
+        String FooText = Foo.getFoo();
+        if (FooText == null || FooText.trim().isEmpty()) {
             return false;
         }
 
-        List<Answer> answers = question.getAnswers();
+        List<Answer> answers = Foo.getAnswers();
         if (answers == null || answers.size() < 2) {
             return false;
         }
@@ -110,7 +110,7 @@ public class QuizService {
         return correctAnswers == 1;
     }    
     
-    public boolean categoryHasEnoughValidQuestions(Integer categoryId, int requiredCount) {
+    public boolean categoryHasEnoughValidFoos(Integer categoryId, int requiredCount) {
 
         if (categoryId == null || requiredCount <= 0) {
             return false;
@@ -121,22 +121,22 @@ public class QuizService {
             return false;
         }
 
-        List<Question> questions = questionRepository.findByCategory(category);
-        int validCount = countValidQuestions(questions);
+        List<Foo> Foos = FooRepository.findByCategory(category);
+        int validCount = countValidFoos(Foos);
 
         return validCount >= requiredCount;
     }
     
-    public int countValidQuestions(List<Question> questions) {
+    public int countValidFoos(List<Foo> Foos) {
 
-        if (questions == null || questions.isEmpty()) {
+        if (Foos == null || Foos.isEmpty()) {
             return 0;
         }
 
         int count = 0;
 
-        for (Question question : questions) {
-            if (validateQuestionForQuiz(question)) {
+        for (Foo Foo : Foos) {
+            if (validateFooForQuiz(Foo)) {
                 count++;
             }
         }

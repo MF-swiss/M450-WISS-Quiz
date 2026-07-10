@@ -15,20 +15,29 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="question")
-public class Question {
+@Table(name = "foo")
+public class Foo {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	private String question;
-	
+
+	public class Foo {
+
+  		private static Foo foo;
+  		public Foo getInstance() {
+    		if(foo==null) {
+      			foo = new Foo();
+    	}
+    	return foo;
+  	}
+}
+
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "category_id", nullable = false)
 	private Category category;
-	
-    public Integer getId() {
+
+	public Integer getId() {
 		return id;
 	}
 
@@ -36,33 +45,31 @@ public class Question {
 		this.id = id;
 	}
 
-	public String getQuestion() {
-		return question;
+	public String getFoo() {
+		return Foo;
 	}
 
-	public void setQuestion(String question) {
-		this.question = question;
+	public void setFoo(String foo) {
+		this.Foo = foo;
 	}
-	
+
 	public void setCategory(Category cat) {
 		this.category = cat;
 	}
-	
+
 	public Category getCategory() {
 		return category;
 	}
 
-	
-	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<Answer> answers = new ArrayList<>();
-	
+	@OneToMany(mappedBy = "foo", cascade = CascadeType.ALL)
+	private List<Answer> answers = new ArrayList<>();
+
 	public List<Answer> getAnswers() {
 		return answers;
 	}
 
-	public void setAnswers(List<Answer> questions) {
-		this.answers = questions;
+	public void setAnswers(List<Answer> foo) {
+		this.answers = foo;
 	}
-	
-	
+
 }
